@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/orange_nav">
+
+    <!-- Header Card ala Waiter -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/headerCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="25dp"
+        app:cardElevation="4dp"
+        android:layout_marginTop="-40dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeWidth="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="45dp"
+            android:paddingBottom="20dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:gravity="center_vertical"
+            android:background="@color/white">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Admin"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    android:textColor="#121111" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Dashboard"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="#121111" />
+            </LinearLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="5dp"
+                app:strokeWidth="0dp"
+                app:cardBackgroundColor="@color/white">
+
+                <ImageView
+                    android:id="@+id/btnLogout"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/img_11"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Logout" />
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Wadah Utama untuk Semua Fragment -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/fragmentCard"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:cardCornerRadius="28dp"
+        app:cardElevation="0dp"
+        android:layout_marginBottom="-25dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/headerCard"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:strokeWidth="0dp">
+
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Custom Floating Bottom Navigation ala Waiter -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/customBottomNav"
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"
+        android:layout_marginBottom="4dp"
+        app:cardCornerRadius="100dp"
+        app:cardElevation="12dp"
+        app:strokeWidth="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingHorizontal="12dp">
+
+            <!-- Work/Register Item -->
+            <LinearLayout
+                android:id="@+id/item_work"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:background="@drawable/nav_item_active_bg"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp"
+                android:layout_marginHorizontal="4dp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/icon_work"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/img_17"
+                    app:tint="@color/white"
+                    android:contentDescription="Register" />
+
+                <TextView
+                    android:id="@+id/text_work"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="Work"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:visibility="visible" />
+            </LinearLayout>
+
+            <!-- Menu/Pesanan Item -->
+            <LinearLayout
+                android:id="@+id/item_menu"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/nav_item_inactive_bg"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingHorizontal="0dp"
+                android:layout_marginHorizontal="4dp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/icon_menu"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/img_1"
+                    app:tint="@color/nav_unselected"
+                    android:contentDescription="Menu" />
+
+                <TextView
+                    android:id="@+id/text_menu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="Menu"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <!-- Table/Meja Item -->
+            <LinearLayout
+                android:id="@+id/item_table"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/nav_item_inactive_bg"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingHorizontal="0dp"
+                android:layout_marginHorizontal="4dp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/icon_table"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/img_2"
+                    app:tint="@color/nav_unselected"
+                    android:contentDescription="Table" />
+
+                <TextView
+                    android:id="@+id/text_table"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="Table"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <!-- Member/Tabel Item -->
+            <LinearLayout
+                android:id="@+id/item_member"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/nav_item_inactive_bg"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingHorizontal="0dp"
+                android:layout_marginHorizontal="4dp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/icon_member"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/img"
+                    app:tint="@color/nav_unselected"
+                    android:contentDescription="Member" />
+
+                <TextView
+                    android:id="@+id/text_member"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="Member"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
