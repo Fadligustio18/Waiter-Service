@@ -8,29 +8,72 @@ import MainLayout from "./layout/MainLayout"
 
 import Dashboard from "./pages/Dashboard"
 import MenuPage from "./pages/MenuPage"
+import OrdersPage from "./pages/OrdersPage"
+import TablesPage from "./pages/TablesPage"
+import UsersPage from "./pages/UsersPage"
+
+import LoginPage from "./pages/auth/LoginPage"
 
 export default function App() {
 
   return (
     <BrowserRouter>
 
-      <MainLayout>
+      <Routes>
 
-        <Routes>
+        {/* LOGIN */}
+        <Route
+          path="/login"
+          element={<LoginPage />}
+        />
 
-          <Route
-            path="/"
-            element={<Dashboard />}
-          />
+        {/* DASHBOARD LAYOUT */}
+        <Route
+          path="/"
+          element={
+            <MainLayout>
+              <Dashboard />
+            </MainLayout>
+          }
+        />
 
-          <Route
-            path="/menu"
-            element={<MenuPage />}
-          />
+        <Route
+          path="/menu"
+          element={
+            <MainLayout>
+              <MenuPage />
+            </MainLayout>
+          }
+        />
 
-        </Routes>
+        <Route
+          path="/orders"
+          element={
+            <MainLayout>
+              <OrdersPage />
+            </MainLayout>
+          }
+        />
 
-      </MainLayout>
+        <Route
+          path="/tables"
+          element={
+            <MainLayout>
+              <TablesPage />
+            </MainLayout>
+          }
+        />
+
+        <Route
+          path="/users"
+          element={
+            <MainLayout>
+              <UsersPage />
+            </MainLayout>
+          }
+        />
+
+      </Routes>
 
     </BrowserRouter>
   )

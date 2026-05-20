@@ -8,7 +8,7 @@ import kotlin.jvm.java
 
 object Client {
 
-    const val BASE_URL = "http://192.168.69.16:3000/"
+    const val BASE_URL = "http://192.168.1.5:3000/"
 
 
     private val http by lazy {
