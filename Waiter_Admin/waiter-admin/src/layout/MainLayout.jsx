@@ -41,6 +41,10 @@ export default function MainLayout({ children }) {
     },
   ]
 
+  const user = JSON.parse(
+  localStorage.getItem("user")
+)
+
   return (
     <div className="flex">
 
@@ -69,12 +73,12 @@ export default function MainLayout({ children }) {
 
             <div>
 
-              <h2 className="font-bold text-lg">
-                Admin
+             <h2 className="font-bold text-lg">
+              {user?.name}
               </h2>
 
               <p className="text-gray-400 text-sm">
-                Super Admin
+              {user?.roleName}
               </p>
 
             </div>

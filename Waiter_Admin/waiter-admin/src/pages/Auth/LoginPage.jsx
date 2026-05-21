@@ -35,6 +35,11 @@ export default function LoginPage() {
       // SIMPAN TOKEN / LOGIN STATUS
       localStorage.setItem("token", "login-success")
 
+      localStorage.setItem(
+  "user",
+  JSON.stringify(response.data)
+)
+
       // PINDAH KE DASHBOARD
       navigate("/")
 
