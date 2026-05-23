@@ -1,31 +1,166 @@
-const tables = [
-  {
-    id: 1,
-    name: "VIP 01",
-    status: "occupied",
-    customer: 4
-  },
-  {
-    id: 2,
-    name: "Table 02",
-    status: "available",
-    customer: 0
-  },
-  {
-    id: 3,
-    name: "Family 01",
-    status: "occupied",
-    customer: 6
-  },
-  {
-    id: 4,
-    name: "Outdoor 03",
-    status: "reserved",
-    customer: 2
-  }
-]
+import { useEffect, useState } from "react"
+import { motion } from "framer-motion"
+import toast from "react-hot-toast"
+import Swal from "sweetalert2"
+import api from "../services/api"
 
 export default function TablesPage() {
+
+  const [tables, setTables] = useState([])
+  const [isAddOpen, setIsAddOpen] = useState(false)
+  const [tableName, setTableName] = useState("")
+  useEffect(() => {
+
+  getTables()
+
+}, [])
+
+async function getTables() {
+
+  try {
+
+    const response = await api.get("/api/location")
+
+    console.log(response.data)
+
+    setTables(response.data)
+
+  } catch (error) {
+
+    console.log(error)
+
+  }
+
+}
+
+async function deleteTable(id) {
+
+  const result = await Swal.fire({
+
+    title: "Hapus meja?",
+
+    text: "Data meja akan dihapus permanen",
+
+    icon: "warning",
+
+    showCancelButton: true,
+
+    confirmButtonColor: "#ef4444",
+
+    cancelButtonColor: "#9ca3af",
+
+    confirmButtonText: "Ya, hapus",
+
+    cancelButtonText: "Batal",
+
+    background: "#fff",
+
+    color: "#111"
+
+  })
+
+  if (!result.isConfirmed) return
+
+  try {
+
+    await api.delete(`/api/location/${id}`)
+
+    // REFRESH
+    getTables()
+
+    // SUCCESS
+    Swal.fire({
+
+      icon: "success",
+
+      title: "Deleted!",
+
+      text: "Meja berhasil dihapus",
+
+      confirmButtonColor: "#ef4444",
+
+      timer: 2000,
+
+      showConfirmButton: false
+
+    })
+
+  } catch (error) {
+
+    console.log(error)
+
+    Swal.fire({
+
+      icon: "error",
+
+      title: "Oops...",
+
+      text: "Meja gagal dihapus",
+
+      confirmButtonColor: "#ef4444"
+
+    })
+
+  }
+
+}
+
+async function createTable() {
+
+  try {
+
+    await api.post("/api/location", {
+
+      id: 0,
+
+      name: tableName
+
+    })
+
+    // REFRESH
+    getTables()
+
+    // RESET
+    setTableName("")
+Swal.fire({
+
+  icon: "success",
+
+  title: "Berhasil",
+
+  text: "Meja berhasil ditambah",
+
+  confirmButtonColor: "#ef4444",
+
+  background: "#fff",
+
+  color: "#111",
+
+  timer: 2000,
+
+  showConfirmButton: false
+
+})
+
+  } catch (error) {
+
+    console.log(error)
+
+Swal.fire({
+
+  icon: "error",
+
+  title: "Oops...",
+
+  text: "Gagal tambah meja",
+
+  confirmButtonColor: "#ef4444"
+
+})
+
+  }
+
+}
 
   function getStatusColor(status) {
 
@@ -42,121 +177,245 @@ export default function TablesPage() {
 
   return (
     <div>
+{/* HEADER */}
+<div className="flex justify-between items-center mb-10">
+
+  <div>
+
+    <h1 className="text-4xl font-bold">
+      Table Management
+    </h1>
+
+    <p className="text-gray-500 mt-2">
+      Kelola meja restoran
+    </p>
+
+  </div>
+
+  <button
+
+    onClick={() => setIsAddOpen(true)}
+
+    className="
+      bg-red-500 text-white
+
+      px-6 py-4
+      rounded-2xl
+      font-bold
+
+      hover:bg-red-600
+      hover:scale-105
+
+      transition
+      duration-300
+    "
+  >
+
+    + Tambah Meja
+
+  </button>
+
+</div>
+      {/* ADD MODAL */}
+{isAddOpen && (
+
+  <motion.div
+
+    initial={{ opacity: 0 }}
+
+    animate={{ opacity: 1 }}
+
+    exit={{ opacity: 0 }}
+
+    className="
+      fixed inset-0
+      bg-black/40
+      backdrop-blur-sm
+
+      flex items-center justify-center
+
+      z-50
+    "
+  >
+
+    <motion.div
+
+      initial={{
+        opacity: 0,
+        scale: 0.8,
+        y: 50
+      }}
+
+      animate={{
+        opacity: 1,
+        scale: 1,
+        y: 0
+      }}
+
+      transition={{
+        duration: 0.3
+      }}
+
+      className="
+        bg-white
+        w-full
+        max-w-xl
+        rounded-3xl
+        p-8
+        shadow-2xl
+      "
+    >
 
       {/* HEADER */}
-      <div className="flex justify-between items-center mb-10">
+      <div className="flex justify-between items-center mb-8">
 
         <div>
 
-          <h1 className="text-4xl font-bold">
-            Table Management
-          </h1>
+          <h2 className="text-3xl font-bold">
+            Tambah Meja
+          </h2>
 
-          <p className="text-gray-500 mt-2">
-            Kelola meja restoran
+          <p className="text-gray-500 mt-1">
+            Tambahkan meja baru restoran
           </p>
 
         </div>
 
-        <button className="bg-black text-white px-5 py-3 rounded-2xl">
-          + Tambah Meja
+        <button
+
+          onClick={() => setIsAddOpen(false)}
+
+          className="text-3xl"
+        >
+
+          ✕
+
         </button>
 
       </div>
 
-      {/* STATS */}
-      <div className="grid grid-cols-3 gap-5 mb-10">
+      {/* INPUT */}
+      <input
+        type="text"
+        placeholder="Add Table Name"
 
-        <div className="bg-white p-6 rounded-3xl shadow">
+        value={tableName}
 
-          <p className="text-gray-500">
-            Total Meja
-          </p>
+        onChange={(e) => setTableName(e.target.value)}
 
-          <h2 className="text-4xl font-bold mt-4">
-            24
-          </h2>
+        className="
+          w-full
+          bg-gray-100
+          p-5
+          rounded-2xl
+          outline-none
 
-        </div>
+          focus:ring-4
+          focus:ring-red-200
 
-        <div className="bg-white p-6 rounded-3xl shadow">
+          transition
+        "
+      />
 
-          <p className="text-gray-500">
-            Meja Aktif
-          </p>
+      {/* BUTTON */}
+      <button
 
-          <h2 className="text-4xl font-bold mt-4">
-            12
-          </h2>
+        onClick={() => {
 
-        </div>
+          createTable()
 
-        <div className="bg-white p-6 rounded-3xl shadow">
+          setIsAddOpen(false)
 
-          <p className="text-gray-500">
-            Reserved
-          </p>
+        }}
 
-          <h2 className="text-4xl font-bold mt-4">
-            3
-          </h2>
+        className="
+          w-full
+          mt-6
 
-        </div>
+          bg-red-500
+          text-white
 
-      </div>
+          p-5
+          rounded-2xl
+          font-bold
+
+          hover:bg-red-600
+          hover:scale-[1.02]
+
+          transition
+          duration-300
+        "
+      >
+
+        + Tambah Meja
+
+      </button>
+
+    </motion.div>
+
+  </motion.div>
+
+)}
+      
+
+
 
       {/* TABLE GRID */}
-      <div className="grid grid-cols-3 gap-6">
+      <div className="flex flex-col gap">
 
         {tables.map(table => (
+<motion.div
 
-          <div
-            key={table.id}
-            className="bg-white rounded-3xl shadow p-6 hover:scale-[1.02] transition"
-          >
+  initial={{ opacity: 0, y: 30 }}
 
-            {/* TOP */}
-            <div className="flex justify-between items-start">
+  animate={{ opacity: 1, y: 0 }}
 
-              <div>
+  transition={{ duration: 0.3 }}
 
-                <h2 className="text-2xl font-bold">
-                  {table.name}
-                </h2>
+  className="
+    bg-white rounded-3xl p-5 shadow
+    mb-5
+    hover:scale-105
+    hover:shadow-2xl
+    transition
+    duration-300
+       flex items-center justify-between
+       
+  "
+>
 
-                <p className="text-gray-500 mt-1">
-                  {table.customer} Customer
-                </p>
 
-              </div>
+    <div>
 
-              <span className={`
-                px-4 py-2 rounded-xl text-sm font-semibold
-                ${getStatusColor(table.status)}
-              `}>
+      <h2 className="text-2xl font-bold">
+        {table.name}
+      </h2>
 
-                {table.status}
+    </div>
 
-              </span>
+        <button
 
-            </div>
+        onClick={() => deleteTable(table.id)}
 
-            {/* BUTTON */}
-            <div className="flex gap-3 mt-8">
+        className="
+          bg-red-500 text-white
+          px-5 py-3 rounded-2xl
 
-              <button className="flex-1 bg-yellow-400 py-3 rounded-2xl font-semibold">
-                Edit
-              </button>
+          hover:bg-red-600
+          hover:scale-105
 
-              <button className="flex-1 bg-red-500 text-white py-3 rounded-2xl font-semibold">
-                Delete
-              </button>
+          transition
+          duration-300
+        "
+      >
 
-            </div>
+        Delete
 
-          </div>
+      </button>
 
-        ))}
+  </motion.div>
+
+))}
 
       </div>
 

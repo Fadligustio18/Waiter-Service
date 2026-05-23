@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-
+import Swal from "sweetalert2"
 import api from "../services/api"
 
 export default function UsersPage() {
@@ -49,13 +49,37 @@ const [isEditOpen, setIsEditOpen] = useState(false)
     setRoleId(0)
     setRoleName("")
    
-    alert("User berhasil ditambah")
+    Swal.fire({
+
+  icon: "success",
+
+  title: "Berhasil",
+
+  text: "User berhasil ditambah",
+
+  confirmButtonColor: "#111827",
+
+  timer: 2000,
+
+  showConfirmButton: false
+
+})
 
   } catch (error) {
 
     console.log(error)
 
-    alert("Gagal tambah user")
+   Swal.fire({
+
+  icon: "error",
+
+  title: "Oops...",
+
+  text: "Gagal tambah user",
+
+  confirmButtonColor: "#111827"
+
+})
 
   }
 
@@ -63,31 +87,69 @@ const [isEditOpen, setIsEditOpen] = useState(false)
 
 async function deleteUser(id) {
 
-  const confirmDelete = confirm(
-    "Yakin ingin hapus user?"
-  )
+  const result = await Swal.fire({
 
-  if (!confirmDelete) return
+    title: "Hapus user?",
+
+    text: "Data user akan dihapus permanen",
+
+    icon: "warning",
+
+    showCancelButton: true,
+
+    confirmButtonColor: "#ef4444",
+
+    cancelButtonColor: "#9ca3af",
+
+    confirmButtonText: "Ya, hapus",
+
+    cancelButtonText: "Batal"
+
+  })
+
+  if (!result.isConfirmed) return
 
   try {
 
     await api.delete(`/api/user/${id}`)
 
-    // REFRESH DATA
     getUsers()
 
-    alert("User berhasil dihapus")
+    Swal.fire({
+
+      icon: "success",
+
+      title: "Deleted!",
+
+      text: "User berhasil dihapus",
+
+      confirmButtonColor: "#111827",
+
+      timer: 2000,
+
+      showConfirmButton: false
+
+    })
 
   } catch (error) {
 
     console.log(error)
 
-    alert("Gagal hapus user")
+    Swal.fire({
+
+      icon: "error",
+
+      title: "Oops...",
+
+      text: "Gagal hapus user",
+
+      confirmButtonColor: "#111827"
+
+    })
 
   }
 
 }
-
 function editUser(user) {
 
   setEditId(user.id)
@@ -126,13 +188,37 @@ roleName: editRoleName
     setIsEditOpen(false)
    
    
-    alert("User berhasil diupdate")
+   Swal.fire({
+
+  icon: "success",
+
+  title: "Updated!",
+
+  text: "User berhasil diupdate",
+
+  confirmButtonColor: "#111827",
+
+  timer: 2000,
+
+  showConfirmButton: false
+
+})
 
   } catch (error) {
 
     console.log(error)
 
-    alert("Gagal update user")
+  Swal.fire({
+
+  icon: "error",
+
+  title: "Oops...",
+
+  text: "Gagal update user",
+
+  confirmButtonColor: "#111827"
+
+})
 
   }
 
