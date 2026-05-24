@@ -7,6 +7,8 @@ import api from "../services/api"
 export default function TablesPage() {
 
   const [tables, setTables] = useState([])
+  const [currentPage, setCurrentPage] =
+  useState(1)
   const [isAddOpen, setIsAddOpen] = useState(false)
   const [tableName, setTableName] = useState("")
   useEffect(() => {
@@ -175,6 +177,21 @@ Swal.fire({
     return "bg-yellow-100 text-yellow-600"
   }
 
+
+  const tablesPerPage = 10
+
+const lastIndex =
+  currentPage * tablesPerPage
+
+const firstIndex =
+  lastIndex - tablesPerPage
+
+const currentTables =
+  tables.slice(firstIndex, lastIndex)
+
+const totalPages =
+  Math.ceil(tables.length / tablesPerPage)
+
   return (
     <div>
 {/* HEADER */}
@@ -205,7 +222,9 @@ Swal.fire({
 
       hover:bg-red-600
       hover:scale-105
+   text-lg
 
+    shadow-lg
       transition
       duration-300
     "
@@ -332,7 +351,7 @@ Swal.fire({
           w-full
           mt-6
 
-          bg-red-500
+          bg-blue-500
           text-white
 
           p-5
@@ -363,7 +382,7 @@ Swal.fire({
       {/* TABLE GRID */}
       <div className="flex flex-col gap">
 
-        {tables.map(table => (
+        {currentTables.map(table => (
 <motion.div
 
   initial={{ opacity: 0, y: 30 }}
@@ -375,7 +394,7 @@ Swal.fire({
   className="
     bg-white rounded-3xl p-5 shadow
     mb-5
-    hover:scale-105
+    hover:scale-[1.01]
     hover:shadow-2xl
     transition
     duration-300
@@ -398,7 +417,7 @@ Swal.fire({
         onClick={() => deleteTable(table.id)}
 
         className="
-          bg-red-500 text-white
+          bg-red-600 text-white
           px-5 py-3 rounded-2xl
 
           hover:bg-red-600
@@ -416,6 +435,44 @@ Swal.fire({
   </motion.div>
 
 ))}
+
+<div className="
+  flex
+  justify-center
+  items-center
+  gap-3
+  mt-8
+">
+
+  {[...Array(totalPages)].map((_, index) => (
+
+    <button
+
+      key={index}
+
+      onClick={() => setCurrentPage(index + 1)}
+
+      className={`
+        px-5 py-3
+        rounded-2xl
+        font-bold
+
+        transition
+
+        ${currentPage === index + 1
+          ? "bg-red-500 text-white"
+          : "bg-white text-black"
+        }
+      `}
+    >
+
+      {index + 1}
+
+    </button>
+
+  ))}
+
+</div>
 
       </div>
 

@@ -437,7 +437,7 @@ roleName: editRoleName
     <button
     onClick={createUser}
 
-      className="bg-black text-white rounded-2xl font-bold"
+      className="bg-red-500 text-white rounded-2xl font-bold"
     >
 
       Tambah
@@ -523,7 +523,7 @@ roleName: editRoleName
 
               onClick={() => editUser(user)}
 
-              className="bg-yellow-400 px-4 py-2 rounded-xl font-semibold"
+              className="bg-yellow-300 px-4 py-2 rounded-xl font-semibold"
             >
 
               Edit
@@ -534,7 +534,7 @@ roleName: editRoleName
 
               onClick={() => deleteUser(user.id)}
 
-              className="bg-red-500 text-white px-4 py-2 rounded-xl font-semibold"
+              className="bg-red-600 text-white px-4 py-2 rounded-xl font-semibold"
             >
 
               Delete

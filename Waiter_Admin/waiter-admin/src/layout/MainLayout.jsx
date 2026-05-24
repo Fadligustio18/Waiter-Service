@@ -1,36 +1,45 @@
 import { Link, useLocation } from "react-router-dom"
+import {
+  useEffect,
+  useState
+} from "react"
 
+import api
+from "../services/api"
 import {
   FaHome,
   FaUtensils,
   FaClipboardList,
   FaChair,
   FaUsers,
+  FaSignOutAlt,
   FaCog
 } from "react-icons/fa"
 
 export default function MainLayout({ children }) {
 
+useEffect(() => {
+
+  getNavbarData()
+
+}, [])
+
   const location = useLocation()
 
   const menus = [
-    {
-      name: "Dashboard",
-      path: "/",
-      icon: <FaHome />
-    },
+   
     {
       name: "Menu",
       path: "/menu",
       icon: <FaUtensils />
     },
     {
-      name: "Pesanan",
+      name: "Orders",
       path: "/orders",
       icon: <FaClipboardList />
     },
     {
-      name: "Meja",
+      name: "Tables",
       path: "/tables",
       icon: <FaChair />
     },
@@ -45,71 +54,134 @@ export default function MainLayout({ children }) {
   localStorage.getItem("user")
 )
 
-  return (
-    <div className="flex">
+const [orders, setOrders] =
+  useState([])
 
-      {/* SIDEBAR */}
-      <div className="w-72 min-h-screen bg-[#111827] text-white p-6 flex flex-col">
+const [menusData, setMenusData] =
+  useState([])
+
+const [tables, setTables] =
+  useState([])
+
+
+  async function getNavbarData() {
+
+  try {
+
+    const orderResponse =
+      await api.get("/api/order")
+
+    setOrders(orderResponse.data)
+
+  } catch (error) {
+
+    console.log(error)
+
+  }
+
+  try {
+
+    const menuResponse =
+      await api.get("/api/menu")
+
+    setMenusData(menuResponse.data)
+
+  } catch (error) {
+
+    console.log(error)
+
+  }
+
+  try {
+
+    const tableResponse =
+      await api.get("/api/location")
+
+    setTables(tableResponse.data)
+
+  } catch (error) {
+
+    console.log(error)
+
+  }
+
+}
+return (
+
+  <div className="
+    min-h-screen
+    bg-[#f5f5f5]
+    p-6
+  ">
+
+    {/* NAVBAR */}
+  <div
+
+  style={{
+
+    backgroundImage:
+      "url('https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=2070')"
+
+  }}
+
+  className="
+    relative
+    overflow-hidden
+
+    rounded-[40px]
+    bg-cover
+    bg-center
+
+    p-10
+
+    text-white
+  "
+>
+
+      {/* TOP */}
+      <div className="
+        flex
+        justify-between
+        items-center
+      ">
 
         {/* LOGO */}
-        <div className="mb-12">
-
-          <h1 className="text-3xl font-bold">
-            WAITER
-          </h1>
-
-          <p className="text-gray-400 mt-1">
-            Admin Dashboard
-          </p>
-
-        </div>
-
-        {/* PROFILE */}
-        <div className="bg-white/10 rounded-3xl p-4 mb-10">
-
-          <div className="flex items-center gap-4">
-
-            <div className="w-14 h-14 rounded-full bg-orange-400"></div>
-
-            <div>
-
-             <h2 className="font-bold text-lg">
-              {user?.name}
-              </h2>
-
-              <p className="text-gray-400 text-sm">
-              {user?.roleName}
-              </p>
-
-            </div>
-
-          </div>
-
-        </div>
+        <h1 className="
+          text-2xl
+          font-bold
+        ">
+          Panel Admin
+        </h1>
 
         {/* MENU */}
-        <div className="flex flex-col gap-3 flex-1">
+        <div className="
+          flex
+          items-center
+          gap-8
+        ">
 
           {menus.map(menu => (
 
             <Link
+
               key={menu.path}
+
               to={menu.path}
+
               className={`
-                flex items-center gap-4 p-4 rounded-2xl transition
-                ${location.pathname === menu.path
-                  ? "bg-orange-500 text-white shadow-lg"
-                  : "hover:bg-white/10 text-gray-300"}
+                px-5 py-2
+                rounded-2xl
+                transition
+
+                ${
+                  location.pathname === menu.path
+                  ? "bg-white/20 text-white"
+                  : "text-gray-300 hover:text-white"
+                }
               `}
             >
 
-              <div className="text-xl">
-                {menu.icon}
-              </div>
-
-              <span className="font-medium">
-                {menu.name}
-              </span>
+              {menu.name}
 
             </Link>
 
@@ -117,28 +189,158 @@ export default function MainLayout({ children }) {
 
         </div>
 
-        {/* BOTTOM */}
-        <div>
+        {/* PROFILE */}
+        <div className="
+  flex
+  items-center
+  gap-4
+">
 
-          <button className="w-full bg-white/10 hover:bg-white/20 transition p-4 rounded-2xl flex items-center gap-4">
+  {/* LOGOUT */}
+  <button
 
-            <FaCog />
+    onClick={() => {
 
-            Settings
+      localStorage.removeItem("token")
 
-          </button>
+      window.location.href =
+        "/login"
+
+    }}
+
+    className="
+      px-5 py-2
+
+      rounded-2xl
+
+      bg-gray-300/20
+      text-red-400
+
+      hover:bg-red-500
+      hover:text-white
+
+      transition
+    "
+  >
+
+    Logout
+
+  </button>
+
+  {/* PROFILE */}
+  <div className="
+    w-12 h-12
+    rounded-full
+
+    bg-white/10
+
+    flex
+    items-center
+    justify-center
+
+    backdrop-blur-xl
+  ">
+<img
+
+  src="https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png"
+
+  className="
+    w-full
+    h-full
+
+    object-cover
+    rounded-full
+  "
+
+/>
+
+  </div>
+
+</div>
+
+      </div>
+
+      {/* STATS */}
+      <div className="
+        grid
+        grid-cols-3
+        gap-5
+        mt-10
+      ">
+
+        <div className="
+          bg-white/10
+          rounded-3xl
+          p-6
+        ">
+
+         <p className="text-gray-300">
+            Total Order
+          </p>
+
+          <h1 className="
+            text-5xl
+            font-bold
+            mt-4
+          ">
+            {orders.length}
+          </h1>
+
+        </div>
+
+        <div className="
+          bg-white/10
+          rounded-3xl
+          p-6
+        ">
+
+          <p className="text-gray-300">
+            Total Menu
+          </p>
+
+          <h1 className="
+            text-5xl
+            font-bold
+            mt-4
+          ">
+            {menusData.length}
+          </h1>
+
+        </div>
+
+        <div className="
+          bg-white/10
+          rounded-3xl
+          p-6
+        ">
+
+          <p className="text-gray-300">
+            Total Meja
+          </p>
+
+          <h1 className="
+            text-5xl
+            font-bold
+            mt-4
+          ">
+            {tables.length}
+          </h1>
 
         </div>
 
       </div>
 
-      {/* CONTENT */}
-      <div className="flex-1 bg-gray-100 min-h-screen p-8 overflow-auto">
+    </div>
 
-        {children}
+    {/* CONTENT */}
+    <div className="mt-8">
 
-      </div>
+      {children}
 
     </div>
-  )
+
+  </div>
+
+)
+ 
 }
