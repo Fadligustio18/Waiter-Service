@@ -1,5 +1,6 @@
 package com.waiter.Views
 
+import android.view.LayoutInflater
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -14,6 +15,7 @@ import com.waiter.Models.MejaModel
 import com.waiter.Models.MenuResponse
 import com.waiter.R
 import com.waiter.Services.Client
+import com.waiter.TableSelectionAdapter
 import com.waiter.ViewModels.CartViewModel
 import com.waiter.WaiterMenuAdapter
 import kotlinx.coroutines.launch
@@ -59,72 +61,76 @@ class WaiterMenuFragment : Fragment(R.layout.fragment_waiter_menu) {
     private fun showTableSelectionDialog() {
         viewLifecycleOwner.lifecycleScope.launch {
             try {
-                val response = Client.meja.getMeja()
-                if (response.isSuccessful) {
-                    val tables = response.body() ?: emptyList()
-                    val tableNames = tables.map { "Meja ${it.name}" }.toTypedArray()
+                // 1. Ambil data semua meja
+                val mejaResponse = Client.meja.getMeja()
+                // 2. Ambil data orderan yang sedang aktif (misal status 1, 2, 3)
+                // Kita anggap meja yang ada di list getAllOrders dengan status < 4 (belum dibayar) adalah meja yang terpakai
+                val orderResponse = Client.order.getAllOrders()
 
-                    AlertDialog.Builder(requireContext())
-                        .setTitle("Pilih Meja")
-                        .setItems(tableNames) { _, which ->
+                if (mejaResponse.isSuccessful && orderResponse.isSuccessful) {
+                    val tables = mejaResponse.body() ?: emptyList()
+                    val activeOrders = orderResponse.body() ?: emptyList()
+                    
+                    // Filter meja yang sedang digunakan (status order 1, 2, 3, atau 4)
+                    // Status 5 adalah 'Selesai/Dibayar', jadi semua status < 5 dianggap meja masih terpakai.
+                    val occupiedTableIds = activeOrders
+                        .filter { it.statusId < 5 }
+                        .map { it.locationId }
+                        .toSet()
 
-                            val selectedTable = tables[which]
+                    val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_select_table, null)
+                    val rvTableList = dialogView.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rvTableList)
+                    
+                    val dialog = AlertDialog.Builder(requireContext(), R.style.CustomDialogTheme)
+                        .setView(dialogView)
+                        .create()
 
-                            val input = android.widget.EditText(requireContext())
+                    rvTableList.adapter = TableSelectionAdapter(tables, occupiedTableIds) { selectedTable ->
+                        dialog.dismiss()
+                        showCustomerNameDialog(selectedTable)
+                    }
 
-                            AlertDialog.Builder(requireContext())
-
-                                .setTitle("Nama Customer")
-
-                                .setMessage(
-                                    "Masukkan nama customer untuk meja ${selectedTable.name}"
-                                )
-
-                                .setView(input)
-
-                                .setPositiveButton("Lanjut") { _, _ ->
-
-                                    val customerName =
-                                        input.text.toString()
-
-                                    if (customerName.isEmpty()) {
-
-                                        Toast.makeText(
-                                            requireContext(),
-                                            "Nama customer wajib diisi",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-
-                                        return@setPositiveButton
-
-                                    }
-
-                                    cartViewModel.setSelectedTable(selectedTable)
-
-                                    cartViewModel.setCustomerName(customerName)
-
-                                    tvSelectedTable.text =
-                                        "Meja: ${selectedTable.name}"
-
-                                    Toast.makeText(
-                                        requireContext(),
-                                        "Customer $customerName dipilih",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-
-                                }
-
-                                .setNegativeButton("Batal", null)
-
-                                .show()
-
-                        }
-                        .show()
+                    dialog.show()
+                    dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
                 } else {
-                    Toast.makeText(requireContext(), "Gagal mengambil data meja", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Gagal mengambil data meja atau orderan", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun showCustomerNameDialog(selectedTable: MejaModel) {
+        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_customer_name, null)
+        val tvMessage = dialogView.findViewById<TextView>(R.id.tvDialogMessage)
+        val etName = dialogView.findViewById<com.google.android.material.textfield.TextInputEditText>(R.id.etCustomerName)
+        val btnSave = dialogView.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnSave)
+        val btnCancel = dialogView.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnCancel)
+        
+        tvMessage.text = "Masukkan nama customer untuk meja ${selectedTable.name}"
+
+        val dialog = AlertDialog.Builder(requireContext(), R.style.CustomDialogTheme)
+            .setView(dialogView)
+            .create()
+
+        dialog.show()
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        btnCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        btnSave.setOnClickListener {
+            val customerName = etName.text.toString().trim()
+            if (customerName.isEmpty()) {
+                etName.error = "Nama customer wajib diisi"
+            } else {
+                cartViewModel.setSelectedTable(selectedTable)
+                cartViewModel.setCustomerName(customerName)
+                tvSelectedTable.text = "Meja: ${selectedTable.name}"
+                Toast.makeText(requireContext(), "Meja ${selectedTable.name} untuk $customerName", Toast.LENGTH_SHORT).show()
+                dialog.dismiss()
             }
         }
     }

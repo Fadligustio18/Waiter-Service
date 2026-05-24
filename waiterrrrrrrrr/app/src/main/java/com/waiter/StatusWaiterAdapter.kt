@@ -28,6 +28,7 @@ class StatusWaiterAdapter(
         val btnDrop: ImageView = view.findViewById(R.id.btnDrop)
         val btnServed: View = view.findViewById(R.id.btnServed)
         val layoutStatusHeader: View = view.findViewById(R.id.layoutStatusHeader)
+        val layoutExpandedStatus: View = view.findViewById(R.id.layoutExpandedStatus)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -48,16 +49,17 @@ class StatusWaiterAdapter(
             holder.btnServed.visibility = View.GONE
         }
 
-        holder.rvOrderItems.visibility = View.GONE
+        holder.layoutExpandedStatus.visibility = View.GONE
 
         val toggleDropdown = View.OnClickListener {
-            if (holder.rvOrderItems.visibility == View.GONE) {
-                holder.rvOrderItems.visibility = View.VISIBLE
-                holder.btnDrop.rotation = 180f
+            val isExpanded = holder.layoutExpandedStatus.visibility == View.VISIBLE
+            if (!isExpanded) {
+                holder.layoutExpandedStatus.visibility = View.VISIBLE
+                holder.btnDrop.animate().rotation(180f).setDuration(300).start()
                 loadOrderDetails(holder, order.id)
             } else {
-                holder.rvOrderItems.visibility = View.GONE
-                holder.btnDrop.rotation = 0f
+                holder.layoutExpandedStatus.visibility = View.GONE
+                holder.btnDrop.animate().rotation(0f).setDuration(300).start()
             }
         }
 

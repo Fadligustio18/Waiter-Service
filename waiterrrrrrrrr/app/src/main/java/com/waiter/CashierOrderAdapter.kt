@@ -16,7 +16,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.text.NumberFormat
+
 import java.util.*
 
 class CashierOrderAdapter(
@@ -34,6 +34,7 @@ class CashierOrderAdapter(
         val btnDone: SlideToActView = view.findViewById(R.id.btnDone)
         val btnDrop: ImageView = view.findViewById(R.id.btnDrop)
         val layoutCashierHeader: View = view.findViewById(R.id.layoutCashierHeader)
+        val layoutExpandedCashier: View = view.findViewById(R.id.layoutExpandedCashier)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -46,35 +47,18 @@ class CashierOrderAdapter(
         // Menggunakan locationName sesuai model terbaru
         holder.tvTableName.text = order.locationName
         
-        holder.rvOrderItems.visibility = View.GONE
-
-        scope.launch {
-            try {
-                // Menggunakan getOrderDetailById sesuai update terakhir di Controller
-                val response = orderControllers.getOrderDetailById(order.id)
-                if (response.isSuccessful) {
-                    val items: List<OrderItemDetail> = response.body()?.items ?: emptyList()
-                    val totalItem = items.sumOf { it.quantity }
-                    val totalPrice = items.sumOf { it.priceAtOrder * it.quantity }
-
-                    withContext(Dispatchers.Main) {
-                        holder.tvTotalItems.text = "Total Item: $totalItem"
-                        holder.tvTotalPrice.text = "Total Harga: ${formatRupiah(totalPrice)}"
-                        
-                        holder.rvOrderItems.layoutManager = LinearLayoutManager(holder.itemView.context)
-                        holder.rvOrderItems.adapter = CashierOrderItemAdapter(items)
-                    }
-                }
-            } catch (e: Exception) { }
-        }
+        holder.layoutExpandedCashier.visibility = View.GONE
 
         val toggleDropdown = View.OnClickListener {
-            if (holder.rvOrderItems.visibility == View.GONE) {
-                holder.rvOrderItems.visibility = View.VISIBLE
-                holder.btnDrop.rotation = 180f
+            val isExpanded = holder.layoutExpandedCashier.visibility == View.VISIBLE
+            if (!isExpanded) {
+                holder.layoutExpandedCashier.visibility = View.VISIBLE
+                holder.btnDrop.animate().rotation(180f).setDuration(300).start()
+                // Pindahkan loadOrderDetails ke sini agar hanya diload saat dibuka
+                loadOrderDetails(holder, order.id)
             } else {
-                holder.rvOrderItems.visibility = View.GONE
-                holder.btnDrop.rotation = 0f
+                holder.layoutExpandedCashier.visibility = View.GONE
+                holder.btnDrop.animate().rotation(0f).setDuration(300).start()
             }
         }
 
@@ -112,10 +96,25 @@ class CashierOrderAdapter(
         }
     }
 
-    private fun formatRupiah(number: Int): String {
-        val localeID = Locale("in", "ID")
-        val formatRupiah = NumberFormat.getCurrencyInstance(localeID)
-        return formatRupiah.format(number.toDouble())
+    private fun loadOrderDetails(holder: ViewHolder, orderId: Int) {
+        scope.launch {
+            try {
+                val response = orderControllers.getOrderDetailById(orderId)
+                if (response.isSuccessful) {
+                    val items: List<OrderItemDetail> = response.body()?.items ?: emptyList()
+                    val totalItem = items.sumOf { it.quantity }
+                    val totalPrice = items.sumOf { it.priceAtOrder * it.quantity }
+
+                    withContext(Dispatchers.Main) {
+                        holder.tvTotalItems.text = "Total Item: $totalItem"
+                        holder.tvTotalPrice.text = formatRupiah(totalPrice)
+                        
+                        holder.rvOrderItems.layoutManager = LinearLayoutManager(holder.itemView.context)
+                        holder.rvOrderItems.adapter = CashierOrderItemAdapter(items)
+                    }
+                }
+            } catch (e: Exception) { }
+        }
     }
 
     override fun getItemCount() = orders.size
@@ -123,6 +122,12 @@ class CashierOrderAdapter(
     fun updateData(newOrders: List<OrderListItem>) {
         orders = newOrders
         notifyDataSetChanged()
+    }
+
+    private fun formatRupiah(number: Int): String {
+        val localeID = Locale("in", "ID")
+        val formatRupiah = java.text.NumberFormat.getCurrencyInstance(localeID)
+        return formatRupiah.format(number.toDouble()).replace("Rp", "Rp ")
     }
 }
 

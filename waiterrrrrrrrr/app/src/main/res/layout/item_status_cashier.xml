@@ -6,55 +6,87 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="16dp"
     android:layout_marginVertical="8dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="4dp"
-    app:strokeWidth="0dp">
+    app:cardCornerRadius="20dp"
+    app:cardElevation="2dp"
+    app:strokeWidth="1dp"
+    app:strokeColor="#F0F0F0">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:animateLayoutChanges="true">
 
-        <!-- Header: Full Width dengan Radius Atas -->
-        <LinearLayout
+        <!-- Header: Clean White Header with Indicator -->
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layoutCashierHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/orange_nav"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
+            android:background="@color/white"
             android:padding="16dp">
+
+            <View
+                android:id="@+id/viewCashierStatus"
+                android:layout_width="4dp"
+                android:layout_height="0dp"
+                android:background="@color/orange_nav"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tvTableName"
+                app:layout_constraintBottom_toBottomOf="@id/tvTotalItems" />
 
             <TextView
                 android:id="@+id/tvTableName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="Meja 1"
-                android:textColor="#FFFFFF"
+                android:textColor="#2D3436"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_marginStart="12dp"
+                app:layout_constraintStart_toEndOf="@id/viewCashierStatus"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/btnDrop" />
+
+            <TextView
+                android:id="@+id/tvTotalItems"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Total Item: 3"
+                android:textColor="#636E72"
+                android:textSize="13sp"
+                android:layout_marginTop="2dp"
+                app:layout_constraintStart_toStartOf="@id/tvTableName"
+                app:layout_constraintTop_toBottomOf="@id/tvTableName"
+                app:layout_constraintEnd_toStartOf="@id/btnDrop" />
 
             <ImageView
                 android:id="@+id/btnDrop"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:src="@drawable/img_14"
-                app:tint="#FFFFFF" />
-        </LinearLayout>
+                android:padding="6dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:tint="#D1D1D1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <!-- Konten: Diberi Padding -->
+        <!-- Expanded Content: Order Details & Payment -->
         <LinearLayout
+            android:id="@+id/layoutExpandedCashier"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@color/w"
+            android:background="#FAFAFA"
+            android:visibility="gone"
             android:padding="16dp">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvOrderItems"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false" />
 
             <View
                 android:layout_width="match_parent"
@@ -62,28 +94,28 @@
                 android:layout_marginVertical="12dp"
                 android:background="#EEEEEE" />
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/tvTotalItems"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Total Item: 3"
-                    android:textColor="#757575"
-                    android:textSize="14sp" />
+                    android:text="Total Tagihan"
+                    android:textColor="#9E9E9E"
+                    android:textSize="12sp"
+                    android:layout_centerVertical="true"/>
 
                 <TextView
                     android:id="@+id/tvTotalPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Total Harga: Rp 50.000"
-                    android:textColor="#1B5E20"
+                    android:text="Rp 50.000"
+                    android:textColor="@color/orange_nav"
                     android:textSize="18sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
+                    android:textStyle="bold"
+                    android:layout_alignParentEnd="true" />
+            </RelativeLayout>
 
             <com.ncorti.slidetoact.SlideToActView
                 android:id="@+id/btnDone"
@@ -93,13 +125,13 @@
                 app:area_margin="4dp"
                 app:inner_color="@color/white"
                 app:outer_color="@color/orange_nav"
-                app:text="Swipe to pay"
+                app:text="Geser untuk Bayar"
                 app:text_style="bold"
                 app:slider_icon="@drawable/img_8"
                 app:icon_margin="10dp"
                 app:slider_icon_color="@color/black"
                 app:text_size="14sp"
-                app:slider_height="50dp"
+                app:slider_height="52dp"
                 app:bump_vibration="50" />
         </LinearLayout>
 

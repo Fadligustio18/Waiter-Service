@@ -122,28 +122,16 @@ class PesananFragment : Fragment(R.layout.fragment_pesanan) {
     }
 
     private fun showEditDialog(menu: Menu) {
-        val dialogView = layoutInflater.inflate(R.layout.dialog_edit_menu, null)
-        val etName = dialogView.findViewById<TextInputEditText>(R.id.etEditName)
-        val etPrice = dialogView.findViewById<TextInputEditText>(R.id.etEditPrice)
 
-        etName.setText(menu.name)
-        etPrice.setText(menu.price)
+
+
+
 
         android.app.AlertDialog.Builder(requireContext())
             .setTitle("Edit Menu")
-            .setView(dialogView)
-            .setPositiveButton("Simpan") { _, _ ->
-                val newName = etName.text.toString()
-                val newPrice = etPrice.text.toString()
 
-                if (newName.isNotEmpty() && newPrice.isNotEmpty()) {
-                    updateMenu(menu, newName, newPrice)
-                } else {
-                    Toast.makeText(requireContext(), "Nama dan Harga tidak boleh kosong", Toast.LENGTH_SHORT).show()
-                }
-            }
-            .setNegativeButton("Batal", null)
-            .show()
+
+
     }
 
     private fun updateMenu(oldMenu: Menu, newName: String, newPrice: String) {

@@ -28,8 +28,9 @@ class TableOrderAdapter(
         val rvItems: RecyclerView = view.findViewById(R.id.rvItems)
         val tvTotal: TextView = view.findViewById(R.id.tvTotal)
         val btnCheckout: SlideToActView = view.findViewById(R.id.btnCheckout)
-        val layoutTableHeader: LinearLayout = view.findViewById(R.id.layoutTableHeader)
+        val layoutTableHeader: View = view.findViewById(R.id.layoutTableHeader)
         val tvCustomerName: TextView = view.findViewById(R.id.tvCustomerName)
+        val layoutExpandedContent: View = view.findViewById(R.id.layoutExpandedContent)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -59,12 +60,15 @@ class TableOrderAdapter(
         holder.rvItems.adapter = itemAdapter
 
         // Handle Expand/Collapse
-        holder.rvItems.visibility = if (tableOrder.isExpanded) View.VISIBLE else View.GONE
-        holder.ivExpand.rotation = if (tableOrder.isExpanded) 180f else 0f
+        holder.layoutExpandedContent.visibility = if (tableOrder.isExpanded) View.VISIBLE else View.GONE
+        holder.ivExpand.animate().rotation(if (tableOrder.isExpanded) 180f else 0f).setDuration(300).start()
 
         holder.layoutTableHeader.setOnClickListener {
             tableOrder.isExpanded = !tableOrder.isExpanded
-            notifyItemChanged(position)
+            
+            // Smooth toggle with animateLayoutChanges="true" in XML
+            holder.layoutExpandedContent.visibility = if (tableOrder.isExpanded) View.VISIBLE else View.GONE
+            holder.ivExpand.animate().rotation(if (tableOrder.isExpanded) 180f else 0f).setDuration(300).start()
         }
 
         // Reset slider ke posisi awal agar bisa digeser lagi nanti

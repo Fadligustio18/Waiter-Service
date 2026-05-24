@@ -6,56 +6,88 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="16dp"
     android:layout_marginVertical="8dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="4dp"
-    app:strokeWidth="0dp">
+    app:cardCornerRadius="20dp"
+    app:cardElevation="2dp"
+    app:strokeWidth="1dp"
+    app:strokeColor="#F0F0F0">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:animateLayoutChanges="true">
 
-        <!-- Header: Background menggunakan drawable radius -->
-        <LinearLayout
+        <!-- Header: Background Putih Bersih -->
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layoutStatusHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/orange_nav"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
+            android:background="@color/white"
             android:padding="16dp">
+
+            <View
+                android:id="@+id/viewStatusIndicator"
+                android:layout_width="4dp"
+                android:layout_height="0dp"
+                android:background="@color/orange_nav"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tvTableName"
+                app:layout_constraintBottom_toBottomOf="@id/tvStatus" />
 
             <TextView
                 android:id="@+id/tvTableName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="Meja 1"
-                android:textColor="#FFFFFF"
+                android:textColor="#2D3436"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_marginStart="12dp"
+                app:layout_constraintStart_toEndOf="@id/viewStatusIndicator"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/btnDrop" />
+
+            <TextView
+                android:id="@+id/tvStatus"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Status: Memasak"
+                android:textColor="#636E72"
+                android:textSize="13sp"
+                android:layout_marginTop="2dp"
+                app:layout_constraintStart_toStartOf="@id/tvTableName"
+                app:layout_constraintTop_toBottomOf="@id/tvTableName"
+                app:layout_constraintEnd_toStartOf="@id/btnDrop" />
 
             <ImageView
                 android:id="@+id/btnDrop"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:src="@drawable/img_14"
-                app:tint="#FFFFFF" />
-        </LinearLayout>
+                android:padding="6dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:tint="#D1D1D1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <!-- Bagian Isi (Diberi padding agar menjorok ke dalam) -->
+        <!-- Bagian Isi (Expanded Content) -->
         <LinearLayout
+            android:id="@+id/layoutExpandedStatus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@color/w"
+            android:background="#FAFAFA"
+            android:visibility="gone"
             android:padding="16dp">
 
             <!-- List Detail Pesanan -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvOrderItems"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false" />
 
             <View
                 android:layout_width="match_parent"
@@ -63,36 +95,20 @@
                 android:layout_marginVertical="12dp"
                 android:background="#EEEEEE" />
 
-            <!-- Status & Tombol Selesai -->
-            <LinearLayout
+            <!-- Tombol Selesai -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnServed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/tvStatus"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Status: Memasak"
-                    android:textColor="#333333"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:id="@+id/btnServed"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:backgroundTint="@color/a"
-                    android:text="Selesai"
-                    android:textColor="#FFFFFF"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    android:textAllCaps="false"
-                    app:cornerRadius="8dp"
-                    style="@style/Widget.MaterialComponents.Button.UnelevatedButton"/>
-            </LinearLayout>
+                android:text="Sajikan Pesanan"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textAllCaps="false"
+                app:backgroundTint="@color/orange_nav"
+                app:cornerRadius="12dp"
+                android:paddingVertical="10dp"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"/>
         </LinearLayout>
 
     </LinearLayout>

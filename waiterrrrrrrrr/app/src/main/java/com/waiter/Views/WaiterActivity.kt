@@ -85,12 +85,12 @@ class WaiterActivity : AppCompatActivity() {
 
     // Fungsi untuk memperbarui tampilan UI Navigasi (Warna & Teks)
     private fun updateNavUI(selectedIndex: Int) {
-        // Ambil container utama navigasi untuk animasi
         val navContainer = findViewById<ViewGroup>(R.id.customBottomNav)
         
-        // Inisialisasi animasi smooth (AutoTransition)
+        // Animasi yang lebih smooth dengan Interpolator
         val transition = AutoTransition().apply {
-            duration = 150 // Disamakan dengan AdminActivity
+            duration = 250
+            interpolator = android.view.animation.DecelerateInterpolator()
         }
         TransitionManager.beginDelayedTransition(navContainer, transition)
 
@@ -105,22 +105,20 @@ class WaiterActivity : AppCompatActivity() {
         for (i in items.indices) {
             val params = items[i].layoutParams
             if (i == selectedIndex) {
-                // Item Aktif (Melebar & Berwarna)
+                // Memberikan efek haptic (getar halus) saat terpilih
+                items[i].performHapticFeedback(android.view.HapticFeedbackConstants.VIRTUAL_KEY)
+                
                 items[i].setBackgroundResource(R.drawable.nav_item_active_bg)
                 params.width = ViewGroup.LayoutParams.WRAP_CONTENT
-                items[i].setPadding((16 * density).toInt(), 0, (16 * density).toInt(), 0)
+                items[i].setPadding((20 * density).toInt(), 0, (20 * density).toInt(), 0)
                 icons[i].imageTintList = ColorStateList.valueOf(colorWhite)
                 texts[i].visibility = View.VISIBLE
-                items[i].elevation = 0f // Reset bayangan saat aktif agar flat
             } else {
-                // Item Tidak Aktif (Bentuk Lingkaran & Berbayangan)
-                items[i].setBackgroundResource(R.drawable.nav_item_inactive_bg)
-                // Buat lebar sama dengan tinggi (48dp) agar jadi lingkaran sempurna
-                params.width = (48 * density).toInt()
+                items[i].setBackgroundResource(android.R.color.transparent)
+                params.width = (52 * density).toInt()
                 items[i].setPadding(0, 0, 0, 0)
                 icons[i].imageTintList = ColorStateList.valueOf(colorUnselected)
                 texts[i].visibility = View.GONE
-                items[i].elevation = 6 * density // Tambahkan efek bayangan (shadow)
             }
             items[i].layoutParams = params
         }
@@ -129,8 +127,10 @@ class WaiterActivity : AppCompatActivity() {
     private fun replaceFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .setCustomAnimations(
-                android.R.anim.fade_in,
-                android.R.anim.fade_out
+                R.anim.slide_up,
+                R.anim.fade_out_fast,
+                R.anim.slide_up,
+                R.anim.fade_out_fast
             )
             .replace(R.id.fragment_container, fragment)
             .commit()

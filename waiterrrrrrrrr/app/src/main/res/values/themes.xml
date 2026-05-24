@@ -14,4 +14,13 @@
         <!-- Background color -->
         <item name="android:windowBackground">@color/background</item>
     </style>
+    <style name="CustomDialogTheme" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="shapeAppearanceLargeComponent">@style/DialogCornerRadius</item>
+    </style>
+
+    <style name="DialogCornerRadius">
+        <item name="cornerSize">20dp</item>
+    </style>
 </resources>

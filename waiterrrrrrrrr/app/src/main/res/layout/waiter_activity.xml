@@ -102,16 +102,17 @@
             android:paddingBottom="32dp" />
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Custom Floating Bottom Navigation -->
+    <!-- Custom Floating Bottom Navigation (Modern Glass Style) -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/customBottomNav"
         android:layout_width="wrap_content"
         android:layout_height="72dp"
         android:layout_marginBottom="24dp"
         app:cardCornerRadius="36dp"
-        app:cardElevation="12dp"
-        app:strokeWidth="0dp"
-        app:cardBackgroundColor="@color/white"
+        app:cardElevation="16dp"
+        app:strokeWidth="1.5dp"
+        app:strokeColor="#1AFFFFFF"
+        app:cardBackgroundColor="#E6FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -121,13 +122,13 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:orientation="horizontal"
-            android:paddingHorizontal="12dp">
+            android:paddingHorizontal="8dp">
 
             <!-- Item Menu -->
             <LinearLayout
                 android:id="@+id/item_menu"
                 android:layout_width="wrap_content"
-                android:layout_height="48dp"
+                android:layout_height="52dp"
                 android:background="@drawable/nav_item_active_bg"
                 android:gravity="center"
                 android:orientation="horizontal"

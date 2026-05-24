@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Gunakan MaterialCardView agar fitur radius & stroke lebih stabil -->
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -7,110 +6,125 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="16dp"
     android:layout_marginVertical="8dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="4dp"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="2dp"
     app:strokeWidth="1dp"
-    app:strokeColor="#DDDDDD"> <!-- Tambahkan garis pinggir tipis agar bentuk meja lebih tegas -->
+    app:strokeColor="#F0F0F0">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:animateLayoutChanges="true"> <!-- Animasi otomatis untuk expand/collapse -->
 
-        <!-- HEADER MEJA: Sekarang menggunakan background melengkung -->
-        <LinearLayout
+        <!-- HEADER MEJA: Modern & Clean -->
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layoutTableHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/orange_nav"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
+            android:background="@color/white"
             android:padding="16dp">
 
-            <LinearLayout
+            <View
+                android:id="@+id/viewStatus"
+                android:layout_width="4dp"
+                android:layout_height="0dp"
+                android:background="@color/orange_nav"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tvTableName"
+                app:layout_constraintBottom_toBottomOf="@id/tvCustomerName" />
 
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/tvTableName"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:text="Meja 1"
+                android:textColor="#2D3436"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_marginStart="12dp"
+                app:layout_constraintStart_toEndOf="@id/viewStatus"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/ivExpand" />
 
-                android:orientation="vertical"
+            <TextView
+                android:id="@+id/tvCustomerName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Customer: Fadli"
+                android:textColor="#636E72"
+                android:textSize="13sp"
+                android:layout_marginTop="2dp"
+                app:layout_constraintStart_toStartOf="@id/tvTableName"
+                app:layout_constraintTop_toBottomOf="@id/tvTableName"
+                app:layout_constraintEnd_toStartOf="@id/ivExpand" />
 
-                android:layout_weight="1"
-
-                >
-
-                <TextView
-                    android:id="@+id/tvTableName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Meja 1"
-                    android:textColor="#FFFFFF"
-                    android:textStyle="bold"
-                    android:textSize="22sp"
-                    />
-
-                <TextView
-                    android:id="@+id/tvCustomerName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Customer: Fadli"
-                    android:textColor="#FFE0B2"
-                    android:textSize="14sp"
-                    android:layout_marginTop="4dp"
-                    />
-
-            </LinearLayout>
             <ImageView
                 android:id="@+id/ivExpand"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:src="@drawable/img_14"
-                app:tint="#FFFFFF" />
-        </LinearLayout>
+                android:padding="6dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:tint="#D1D1D1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <!-- ISI PESANAN (Bawah Header) -->
+        <!-- ISI PESANAN: Collapsible Section -->
         <LinearLayout
+            android:id="@+id/layoutExpandedContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@color/w"
-            android:padding="12dp">
+            android:visibility="visible"
+            android:background="#FAFAFA"
+            android:padding="16dp">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvItems"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginVertical="8dp"
+                android:layout_marginVertical="12dp"
                 android:background="#EEEEEE" />
 
-            <TextView
-                android:id="@+id/tvTotal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Total: Rp 110.000"
-                android:textColor="#333333"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <!-- Ganti Button lama dengan SlideToActView -->
+
+                <TextView
+                    android:id="@+id/tvTotal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rp 100.000"
+                    android:textColor="@color/orange_nav"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_alignParentEnd="false" />
+            </RelativeLayout>
+
             <com.ncorti.slidetoact.SlideToActView
                 android:id="@+id/btnCheckout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="16dp"
                 app:area_margin="4dp"
                 app:inner_color="@color/white"
                 app:outer_color="@color/orange_nav"
-                app:text="Checkout"
+                app:text="Geser untuk Selesaikan"
                 app:text_style="bold"
                 app:slider_icon="@drawable/img_8"
                 app:icon_margin="10dp"
                 app:slider_icon_color="@color/black"
                 app:text_size="14sp"
-                app:slider_height="50dp"
+                app:slider_height="52dp"
                 app:bump_vibration="50" />
         </LinearLayout>
 

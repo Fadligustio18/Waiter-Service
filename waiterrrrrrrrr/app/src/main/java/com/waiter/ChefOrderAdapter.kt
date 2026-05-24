@@ -30,11 +30,12 @@ class ChefOrderAdapter(
         val tvTableName: TextView = view.findViewById(R.id.tvTableName)
         val tvStatus: TextView = view.findViewById(R.id.tvStatus)
         val rvOrderItems: RecyclerView = view.findViewById(R.id.rvOrderItems)
-        val btnPending: Button = view.findViewById(R.id.btnPending) // Tambahkan ini
+        val btnPending: Button = view.findViewById(R.id.btnPending)
         val btnCooking: Button = view.findViewById(R.id.btnCooking)
         val btnReady: Button = view.findViewById(R.id.btnReady)
         val btnDrop: ImageView = view.findViewById(R.id.btnDrop)
-        val layoutChefHeader: LinearLayout = view.findViewById(R.id.layoutChefHeader)
+        val layoutChefHeader: View = view.findViewById(R.id.layoutChefHeader)
+        val layoutExpandedChef: View = view.findViewById(R.id.layoutExpandedChef)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -47,16 +48,17 @@ class ChefOrderAdapter(
         holder.tvTableName.text = order.locationName
         holder.tvStatus.text = "Status: ${order.statusName}"
 
-        holder.rvOrderItems.visibility = View.GONE
+        holder.layoutExpandedChef.visibility = View.GONE
 
         val toggleDropdown = View.OnClickListener {
-            if (holder.rvOrderItems.visibility == View.GONE) {
-                holder.rvOrderItems.visibility = View.VISIBLE
-                holder.btnDrop.rotation = 180f
+            val isExpanded = holder.layoutExpandedChef.visibility == View.VISIBLE
+            if (!isExpanded) {
+                holder.layoutExpandedChef.visibility = View.VISIBLE
+                holder.btnDrop.animate().rotation(180f).setDuration(300).start()
                 loadOrderDetails(holder, order.id)
             } else {
-                holder.rvOrderItems.visibility = View.GONE
-                holder.btnDrop.rotation = 0f
+                holder.layoutExpandedChef.visibility = View.GONE
+                holder.btnDrop.animate().rotation(0f).setDuration(300).start()
             }
         }
 
