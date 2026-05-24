@@ -25,5 +25,13 @@
 
     <color name="orange_nav">#FA8112</color>
     <color name="f">#FAF3E1</color>
-    <color name="nav_unselected">#888888</color>
+    <!-- Modern Restaurant Palette -->
+    <color name="food_primary">#FF6B35</color>
+    <color name="food_bg">#F8F9FA</color>
+    <color name="food_text_dark">#2D3436</color>
+    <color name="food_text_gray">#636E72</color>
+    <color name="food_accent_light">#FFD9C0</color>
+
+    <!-- Navigation Colors -->
+    <color name="nav_unselected">#8E8E93</color>
 </resources>

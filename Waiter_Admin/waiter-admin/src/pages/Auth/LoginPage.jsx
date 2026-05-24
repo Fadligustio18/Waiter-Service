@@ -40,8 +40,8 @@ export default function LoginPage() {
   JSON.stringify(response.data)
 )
 
-      // PINDAH KE DASHBOARD
-      navigate("/")
+    
+      navigate("/menu")
 
     } catch (error) {
 

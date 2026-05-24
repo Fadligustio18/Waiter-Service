@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react"
-
+import { motion }from "framer-motion"
 import api from "../services/api"
+import { BASE_URL }from "../constants/config"
+
 export default function MenuPage() {
+
 const [menus, setMenus] = useState([])
 const [currentPage, setCurrentPage] =
   useState(1)
@@ -43,7 +46,7 @@ function openEdit(menu) {
   )
 
   setPreviewImage(
-    `http://192.168.1.3:3000${menu.imageUrl}`
+    `${BASE_URL}${menu.imageUrl}`
   )
 
   setShowModal(true)
@@ -287,26 +290,46 @@ const filteredMenus =
       {/* GRID MENU */}
       <div className="flex flex-col gap-5">
 
-        {filteredMenus.map(menu =>(
+        {filteredMenus.map((menu, index) =>(
 
-          <div
+  <motion.div
+
   key={menu.id}
- className="
-  bg-white
-  rounded-3xl
-  shadow
 
-  flex
-  items-center
+  initial={{
+    opacity: 0,
+    y: 30
+  }}
 
-  hover:scale-[1.01]
-  transition
-"
+  animate={{
+    opacity: 1,
+    y: 0
+  }}
+
+  transition={{
+
+    duration: 0.4,
+
+    delay: index * 0.08
+
+  }}
+
+  className="
+    bg-white
+    rounded-3xl
+    shadow
+
+    flex
+    items-center
+
+    hover:scale-[1.01]
+    transition
+  "
 >
 
   {/* IMAGE */}
   <img
-    src={`http://192.168.1.3:3000${menu.imageUrl}`}
+    src={`${BASE_URL}${menu.imageUrl}`}
     
           className="
         w-40
@@ -394,7 +417,7 @@ const filteredMenus =
 
   </div>
 
-</div>
+</motion.div>
 
         ))}
  <div className="

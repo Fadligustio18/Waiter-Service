@@ -3,29 +3,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/orange_nav">
+    android:background="@color/background">
 
+    <!-- Background Aksen Atas (Orange) -->
+    <View
+        android:id="@+id/topAccent"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:background="@color/orange_nav"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Header Section -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/headerCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="25dp"
-        app:cardElevation="4dp"
-        android:layout_marginTop="-25dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:strokeWidth="0dp">
+        app:cardCornerRadius="0dp"
+        app:cardElevation="0dp"
+        app:strokeWidth="0dp"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:id="@+id/headerLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingTop="45dp"
-            android:paddingBottom="20dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:gravity="center_vertical"
-            android:background="@color/white">
+            android:paddingTop="48dp"
+            android:paddingBottom="24dp"
+            android:paddingHorizontal="24dp"
+            android:gravity="center_vertical">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -36,25 +43,26 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Waiter"
-                    android:textSize="28sp"
-                    android:textStyle="bold"
-                    android:textColor="#121111" />
+                    android:text="Selamat Berbelanja,"
+                    android:textSize="14sp"
+                    android:textColor="@color/white"
+                    android:alpha="0.8"
+                    android:fontFamily="sans-serif-medium" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Daftar Menu"
-                    android:textSize="20sp"
+                    android:textSize="26sp"
                     android:textStyle="bold"
-                    android:textColor="#121111" />
+                    android:textColor="@color/white" />
             </LinearLayout>
 
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="5dp"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                app:cardCornerRadius="22dp"
+                app:cardElevation="4dp"
                 app:strokeWidth="0dp"
                 app:cardBackgroundColor="@color/white">
 
@@ -64,6 +72,7 @@
                     android:layout_height="22dp"
                     android:layout_gravity="center"
                     android:src="@drawable/img_11"
+                    app:tint="@color/orange_nav"
                     android:clickable="true"
                     android:focusable="true"
                     android:background="?attr/selectableItemBackgroundBorderless"
@@ -73,38 +82,36 @@
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
+    <!-- Kontainer Konten Utama (Fragment Container) -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/fragmentCard"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:cardCornerRadius="30dp"
+        app:cardCornerRadius="32dp"
         app:cardElevation="0dp"
-        android:layout_marginBottom="-20dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginBottom="-32dp"
+        app:strokeWidth="0dp"
         app:layout_constraintTop_toBottomOf="@id/headerCard"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:strokeWidth="0dp">
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <FrameLayout
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white"/>
+            android:background="@color/white"
+            android:paddingBottom="32dp" />
     </com.google.android.material.card.MaterialCardView>
-
-
 
     <!-- Custom Floating Bottom Navigation -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/customBottomNav"
         android:layout_width="wrap_content"
-        android:layout_height="70dp"
-        android:layout_marginBottom="4dp"
-        app:cardCornerRadius="100dp"
+        android:layout_height="72dp"
+        android:layout_marginBottom="24dp"
+        app:cardCornerRadius="36dp"
         app:cardElevation="12dp"
         app:strokeWidth="0dp"
+        app:cardBackgroundColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -116,7 +123,7 @@
             android:orientation="horizontal"
             android:paddingHorizontal="12dp">
 
-            <!-- Menu Item -->
+            <!-- Item Menu -->
             <LinearLayout
                 android:id="@+id/item_menu"
                 android:layout_width="wrap_content"
@@ -124,8 +131,8 @@
                 android:background="@drawable/nav_item_active_bg"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:paddingHorizontal="16dp"
-                android:layout_marginHorizontal="4dp"
+                android:paddingHorizontal="20dp"
+                android:layout_marginHorizontal="6dp"
                 android:clickable="true"
                 android:focusable="true">
 
@@ -148,15 +155,15 @@
                     android:visibility="visible" />
             </LinearLayout>
 
-            <!-- Cart Item -->
+            <!-- Item Cart -->
             <LinearLayout
                 android:id="@+id/item_cart"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:paddingHorizontal="16dp"
-                android:layout_marginHorizontal="4dp"
+                android:paddingHorizontal="20dp"
+                android:layout_marginHorizontal="6dp"
                 android:clickable="true"
                 android:focusable="true">
 
@@ -179,15 +186,15 @@
                     android:visibility="gone" />
             </LinearLayout>
 
-            <!-- Status Item -->
+            <!-- Item Status -->
             <LinearLayout
                 android:id="@+id/item_status"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:paddingHorizontal="16dp"
-                android:layout_marginHorizontal="4dp"
+                android:paddingHorizontal="20dp"
+                android:layout_marginHorizontal="6dp"
                 android:clickable="true"
                 android:focusable="true">
 
@@ -212,7 +219,5 @@
 
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
