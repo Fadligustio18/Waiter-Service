@@ -29,6 +29,7 @@ class TableOrderAdapter(
         val tvTotal: TextView = view.findViewById(R.id.tvTotal)
         val btnCheckout: SlideToActView = view.findViewById(R.id.btnCheckout)
         val layoutTableHeader: LinearLayout = view.findViewById(R.id.layoutTableHeader)
+        val tvCustomerName: TextView = view.findViewById(R.id.tvCustomerName)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -39,7 +40,8 @@ class TableOrderAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val tableOrder = tableOrders[position]
         holder.tvTableName.text = "Meja ${tableOrder.table.name}"
-        
+        holder.tvCustomerName.text =
+            "Customer: ${tableOrder.customerName}"
         val formatter = NumberFormat.getCurrencyInstance(Locale("id", "ID"))
         holder.tvTotal.text = "Total: ${formatter.format(tableOrder.totalPrice).replace("Rp", "Rp ")}"
 

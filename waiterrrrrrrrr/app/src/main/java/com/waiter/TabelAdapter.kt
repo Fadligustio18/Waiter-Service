@@ -11,7 +11,8 @@ import com.waiter.Models.MejaModel
 class TabelAdapter(
     private val tableList: MutableList<MejaModel>,
     private val onUpdateClick: (Int) -> Unit,
-    private val onDeleteClick: (Int) -> Unit
+    private val onDeleteClick: (Int) -> Unit,
+    private val onTableClick: (MejaModel) -> Unit
 ) : RecyclerView.Adapter<TabelAdapter.TableViewHolder>() {
 
     class TableViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -33,6 +34,11 @@ class TabelAdapter(
 
         holder.btnDeleteTable.setOnClickListener {
             onDeleteClick(holder.adapterPosition)
+        }
+        holder.itemView.setOnClickListener {
+
+            onTableClick(table)
+
         }
     }
 

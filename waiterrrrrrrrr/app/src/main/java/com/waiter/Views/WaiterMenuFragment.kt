@@ -67,9 +67,57 @@ class WaiterMenuFragment : Fragment(R.layout.fragment_waiter_menu) {
                     AlertDialog.Builder(requireContext())
                         .setTitle("Pilih Meja")
                         .setItems(tableNames) { _, which ->
+
                             val selectedTable = tables[which]
-                            cartViewModel.setSelectedTable(selectedTable)
-                            Toast.makeText(requireContext(), "Meja ${selectedTable.name} dipilih", Toast.LENGTH_SHORT).show()
+
+                            val input = android.widget.EditText(requireContext())
+
+                            AlertDialog.Builder(requireContext())
+
+                                .setTitle("Nama Customer")
+
+                                .setMessage(
+                                    "Masukkan nama customer untuk meja ${selectedTable.name}"
+                                )
+
+                                .setView(input)
+
+                                .setPositiveButton("Lanjut") { _, _ ->
+
+                                    val customerName =
+                                        input.text.toString()
+
+                                    if (customerName.isEmpty()) {
+
+                                        Toast.makeText(
+                                            requireContext(),
+                                            "Nama customer wajib diisi",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+
+                                        return@setPositiveButton
+
+                                    }
+
+                                    cartViewModel.setSelectedTable(selectedTable)
+
+                                    cartViewModel.setCustomerName(customerName)
+
+                                    tvSelectedTable.text =
+                                        "Meja: ${selectedTable.name}"
+
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "Customer $customerName dipilih",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+
+                                }
+
+                                .setNegativeButton("Batal", null)
+
+                                .show()
+
                         }
                         .show()
                 } else {

@@ -12,6 +12,7 @@ import com.waiter.Models.Account
 import com.waiter.Models.Login
 import com.waiter.R
 import com.waiter.Controllers.AuthControllers
+import com.waiter.Utils.Session
 import kotlinx.coroutines.launch
 
 class LoginActivity: ComponentActivity() {
@@ -43,6 +44,10 @@ class LoginActivity: ComponentActivity() {
                 val response = authController.loginController(data)
                 
                 if (response != null) {
+
+                    Session.userId = response.Id
+
+                    Session.userName = response.Name
                     when (response.Role) {
                         "Waiter" -> {
                             startActivity(Intent(this@LoginActivity, WaiterActivity::class.java))

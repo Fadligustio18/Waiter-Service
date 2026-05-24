@@ -1,7 +1,9 @@
 package com.waiter.Views
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -13,9 +15,18 @@ import com.waiter.Models.OrderDetails
 import com.waiter.Models.OrderItemDetails
 import com.waiter.Models.OrderRequest
 import com.waiter.R
+import com.waiter.Services.Client
+import java.time.LocalDate
 import com.waiter.TableOrderAdapter
 import com.waiter.ViewModels.CartViewModel
 import kotlinx.coroutines.launch
+import com.waiter.Utils.Session
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import com.waiter.Utils.OrderSession
+
+
 
 class CartFragment : Fragment(R.layout.fragment_cart) {
     
@@ -47,16 +58,48 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
                         menuName = it.menu.name
                     )
                 }
-                
+
                 val orderRequest = OrderRequest(
+
                     order = OrderDetails(
-                        userId = 1, // IDEALNYA: Ambil dari Session/SharedPreferences
-                        customerName = "Pelanggan Meja ${tableOrder.table.name}",
-                        statusId = 1, // Status 1 = Pending (untuk Chef)
-                        locationId = tableOrder.table.id
+
+                        userId = Session.userId,
+
+                        customerName = tableOrder.customerName,
+
+                        date = java.text.SimpleDateFormat(
+                            "yyyy-MM-dd",
+                            java.util.Locale.getDefault()
+                        ).format(java.util.Date()),
+
+                        statusId = 1,
+
+                        locationId = tableOrder.table.id,
+
+                        userName = Session.userName
+
                     ),
-                    items = orderItems
+
+                    items = tableOrder.items.map {
+
+                        OrderItemDetails(
+
+                            menuId = it.menu.id,
+
+                            quantity = it.quantity,
+
+                            priceAtOrder = it.menu.price,
+
+                            menuName = it.menu.name
+
+                        )
+
+                    }
+
                 )
+
+                Log.d("ORDER", orderRequest.toString())
+
 
                 lifecycleScope.launch {
                     try {

@@ -34,7 +34,16 @@ class CartViewModel : ViewModel() {
         val orders = tableCarts.mapNotNull { (tableId, items) ->
             val table = tables[tableId] ?: return@mapNotNull null
             if (items.isEmpty()) return@mapNotNull null
-            TableOrder(table, items)
+            TableOrder(
+
+                table = table,
+
+                items = items,
+
+                customerName =
+                    customerNames[tableId] ?: ""
+
+            )
         }
         _allTableOrders.value = orders
     }
@@ -99,5 +108,20 @@ class CartViewModel : ViewModel() {
         tableCarts.clear()
         _cartItems.value = mutableListOf()
         _selectedTable.value = null
+    }
+
+    private val customerNames =
+        mutableMapOf<Int, String>()
+
+    fun setCustomerName(customerName: String) {
+
+        val tableId =
+            _selectedTable.value?.id ?: return
+
+        customerNames[tableId] =
+            customerName
+
+        updateAllTableOrders()
+
     }
 }

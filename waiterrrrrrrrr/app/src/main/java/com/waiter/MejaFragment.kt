@@ -11,10 +11,12 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputEditText
 import com.waiter.Models.MejaModel
-
+import com.waiter.Utils.OrderSession
 import androidx.lifecycle.lifecycleScope
 import com.waiter.Services.Client
 import kotlinx.coroutines.launch
+import com.waiter.Views.CartFragment
+import com.waiter.Views.WaiterMenuFragment
 
 class MejaFragment : Fragment(R.layout.fragment_meja) {
 
@@ -37,6 +39,52 @@ class MejaFragment : Fragment(R.layout.fragment_meja) {
             onDeleteClick = { position ->
                 val table = tableList[position]
                 deleteMejaApi(table.id, position)
+            },
+            onTableClick = { table ->
+
+                val input = EditText(requireContext())
+
+                AlertDialog.Builder(requireContext())
+
+                    .setTitle("Nama Customer")
+
+                    .setMessage("Masukkan nama customer untuk meja ${table.name}")
+
+                    .setView(input)
+
+                    .setPositiveButton("Lanjut") { _, _ ->
+
+                        val customerName = input.text.toString()
+
+                        if (customerName.isEmpty()) {
+
+                            Toast.makeText(
+                                requireContext(),
+                                "Nama customer wajib diisi",
+                                Toast.LENGTH_SHORT
+                            ).show()
+
+                            return@setPositiveButton
+
+                        }
+
+                        OrderSession.tableId = table.id
+
+                        OrderSession.tableName = table.name
+
+                        OrderSession.customerName = customerName
+
+                        parentFragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container, WaiterMenuFragment())
+                            .addToBackStack(null)
+                            .commit()
+
+                    }
+
+                    .setNegativeButton("Batal", null)
+
+                    .show()
+
             }
         )
         rvTableList.adapter = tableAdapter
